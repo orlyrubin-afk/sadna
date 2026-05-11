@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>לא נשברים בסוף</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose: #c4a89e;
+  --rose-dark: #8c6960;
+  --rose-light: #f5ede9;
+  --cream: #faf6f4;
+  --dark: #2f1f1b;
+  --muted: #7a5a54;
+  --text: #3a2a26;
+  --border: #e8ddd9;
+  --bg: #f0ebe7;
+  --white: #ffffff;
+  --green: #4a7a60;
+  --green-bg: #eff7f3;
+  --green-border: #b5d4c2;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  direction: rtl;
+  min-height: 100vh;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--border);
+  z-index: 100;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--rose);
+  transition: width 0.3s ease;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 14px;
+  z-index: 100;
+  gap: 10px;
+}
+.nav-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rose);
+  background: white;
+  color: var(--rose-dark);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.nav-btn:active { background: var(--rose-light); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+.nav-counter {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  flex-shrink: 0;
+}
+.nav-title {
+  font-size: 12px;
+  color: var(--rose);
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── PAGES ── */
+.page {
+  display: none;
+  min-height: 100vh;
+  padding-bottom: 80px;
+  animation: fadeIn 0.25s ease;
+}
+.page.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── COVER ── */
+.cover {
+  background: var(--cream);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 28px 100px;
+}
+.cover-logo { width: 80px; margin-bottom: 28px; }
+.cover-line { width: 44px; height: 3px; background: var(--rose); border-radius: 2px; margin: 0 auto 24px; }
+.cover-title { font-size: 42px; font-weight: 800; color: var(--dark); line-height: 1.15; margin-bottom: 16px; }
+.cover-sub { font-size: 16px; font-weight: 300; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+.cover-divider { width: 32px; height: 1px; background: var(--rose); margin: 0 auto 24px; }
+.cover-footer { font-size: 13px; color: #a08078; line-height: 1.8; }
+.cover-footer strong { display: block; font-size: 14px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+
+/* ── INNER PAGE ── */
+.inner {
+  padding: 24px 20px 0;
+}
+.page-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--rose-light);
+  color: var(--rose-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+.page-h1 { font-size: 26px; font-weight: 800; color: var(--dark); line-height: 1.2; margin-bottom: 20px; }
+.page-h2 { font-size: 21px; font-weight: 700; color: var(--dark); line-height: 1.25; margin-bottom: 16px; }
+.body { font-size: 15px; color: var(--text); line-height: 1.75; margin-bottom: 16px; }
+.muted { color: var(--muted); }
+
+/* ── INPUTS ── */
+.field-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #a08078;
+  margin-bottom: 6px;
+  display: block;
+}
+textarea, input[type="text"] {
+  width: 100%;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  direction: rtl;
+  resize: none;
+  outline: none;
+  margin-bottom: 14px;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+textarea:focus, input[type="text"]:focus {
+  border-color: var(--rose);
+  background: white;
+}
+textarea { min-height: 88px; }
+input[type="text"] { height: 48px; }
+
+/* ── SCALE ── */
+.scale-wrap { margin-bottom: 20px; }
+.scale-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.scale-q { font-size: 14px; font-weight: 600; color: var(--dark); }
+.scale-val { font-size: 18px; font-weight: 800; color: var(--rose-dark); min-width: 24px; text-align: left; }
+input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+  margin: 4px 0 6px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--rose);
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 1px 6px rgba(140,105,96,0.35);
+}
+.scale-ends { display: flex; justify-content: space-between; font-size: 11px; color: #b09490; }
+
+/* ── CHECKBOX ── */
+.cb-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.cb-item {
+  display: flex; align-items: center; gap: 12px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 15px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 500;
+}
+.cb-item.checked {
+  border-color: var(--rose);
+  background: var(--rose-light);
+  color: var(--rose-dark);
+}
+.cb-box {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--rose);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+  color: var(--rose-dark);
+  background: white;
+  transition: background 0.15s, border-color 0.15s;
+}
+.cb-item.checked .cb-box {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: white;
+}
+
+/* ── HIGHLIGHT BOX ── */
+.hl {
+  background: var(--rose-light);
+  border-right: 3px solid var(--rose);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+}
+.hl-dark {
+  background: var(--dark);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #f0e8e5;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ── FORMULA BOX ── */
+.formula {
+  background: var(--dark);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.formula-t { font-size: 18px; font-weight: 700; color: #f0e8e5; margin-bottom: 12px; }
+.formula-ex { font-size: 14px; color: #d4b5ae; font-style: italic; line-height: 1.7; }
+
+/* ── CASE BOX ── */
+.case-box {
+  background: var(--dark);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: #f0e8e5;
+  font-style: italic;
+  line-height: 1.7;
+}
+.tag {
+  display: inline-block;
+  background: var(--rose-light);
+  color: var(--rose-dark);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+/* ── BEFORE/AFTER ── */
+.ba-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+.ba-table th { font-size: 12px; font-weight: 700; padding: 10px 14px; text-align: right; }
+.ba-table th.bad { background: #fdf0ec; color: #9a7068; }
+.ba-table th.good { background: var(--green-bg); color: var(--green); }
+.ba-table td { font-size: 14px; padding: 12px 14px; vertical-align: top; border-top: 1px solid var(--border); line-height: 1.55; }
+.ba-table td.bad { background: #fdf9f8; color: #6a4a44; }
+.ba-table td.good { background: #f8fcf9; color: #2a4a38; }
+
+/* ── REINFORCE CARDS ── */
+.rc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.rc-card { background: var(--rose-light); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+.rc-title { font-size: 11px; font-weight: 700; color: var(--rose); margin-bottom: 8px; letter-spacing: 0.3px; }
+.rc-text { font-size: 13px; color: var(--text); line-height: 1.6; font-style: italic; margin-bottom: 6px; }
+
+/* ── NUMBERED ── */
+.num-list { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
+.num-item { display: flex; gap: 12px; align-items: flex-start; }
+.num-badge {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--rose);
+  color: white;
+  font-weight: 700; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+.num-item input[type="text"] { margin-bottom: 0; flex: 1; }
+
+/* ── ICON GRID ── */
+.icon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.icon-card {
+  background: var(--rose-light);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.icon-card .ic { font-size: 24px; }
+
+/* ── CLOSING ── */
+.closing {
+  background: var(--dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 28px 100px;
+}
+.cl-orb { width: 50px; height: 50px; border-radius: 50%; background: rgba(196,168,158,0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+.cl-dot { width: 20px; height: 20px; border-radius: 50%; background: var(--rose); opacity: 0.8; }
+.cl-title { font-size: 36px; font-weight: 800; color: #f0e8e5; margin-bottom: 20px; line-height: 1.2; }
+.cl-sub { font-size: 16px; color: #d4b5ae; font-weight: 300; line-height: 1.85; max-width: 280px; margin: 0 auto 28px; }
+.cl-div { width: 36px; height: 1px; background: rgba(196,168,158,0.3); margin: 0 auto 24px; }
+.cl-sig { font-size: 14px; color: #a08078; line-height: 1.9; }
+.cl-sig strong { color: #d4b5ae; font-weight: 600; }
+
+/* ── GREEN ITEMS ── */
+.good-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #2a4a38;
+  font-style: italic;
+  line-height: 1.6;
+}
+.good-check { color: var(--green); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── SECTION DIVIDER ── */
+.divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+/* ── ACTION BOX ── */
+.action-box {
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: white;
+}
+.action-box-lbl {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--rose);
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* ── PILLS ── */
+.pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.pill { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 20px; padding: 6px 14px; font-size: 13px; color: var(--green); font-weight: 600; }
+
+/* Grid 5 items */
+.grid5 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.grid5-item { background: var(--rose-light); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600; color: var(--text); text-align: center; }
+.grid5-item.full { grid-column: span 2; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
+<!-- ═══════════════ PAGE 1: COVER ═══════════════ -->
+<div class="page active" id="page-1">
+<div class="cover">
+  <img class="cover-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA" alt="לוגו">
+  <!-- Inline SVG logo approximation in brand colors -->
+  <svg width="80" height="80" viewBox="0 0 80 80" style="margin-bottom:28px">
+    <circle cx="28" cy="35" r="24" fill="#d4b5ae" opacity="0.7"/>
+    <circle cx="50" cy="30" r="18" fill="#c4a89e" opacity="0.8"/>
+    <circle cx="52" cy="52" r="10" fill="#8c6960" opacity="0.6"/>
+    <text x="40" y="72" font-family="Heebo,Arial" font-size="8" font-weight="700" fill="#2f1f1b" text-anchor="middle" direction="rtl">המרכז לייעוץ</text>
+  </svg>
+  <div class="cover-line"></div>
+  <div class="cover-title">לא נשברים<br>בסוף</div>
+  <div class="cover-sub">כלים לשמירה על תפקוד, מוטיבציה<br>וסמכות חינוכית לצוותי חינוך<br>בתקופה מורכבת</div>
+  <div class="cover-divider"></div>
+  <div class="cover-footer">
+    <strong>אורלי רובין</strong>
+    המרכז לייעוץ וטיפול התנהגותי
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 2: OPENING ═══════════════ -->
+<div class="page" id="page-2">
+<div class="inner">
+  <div class="page-chip">פתיחה</div>
+  <div class="page-h1">לפני שמתחילים</div>
+  <p class="body">התקופה האחרונה הביאה איתה עומס, שחיקה, חוסר ודאות ואתגרים שלא הכרנו קודם.</p>
+  <p class="body">לפעמים אנחנו מרגישות שאנחנו כבר יודעות מה נכון לעשות — אבל פשוט אין לנו כוח להשתמש בכלים.</p>
+  <div class="hl">החוברת הזו לא נועדה להוסיף עוד עומס. היא נועדה לעצור רגע, לעשות סדר, ולתת כלים קטנים שאפשר ליישם כבר מחר בבוקר.</div>
+  <p class="body">לא צריך לשנות הכול. לפעמים שינוי קטן, עקבי ומדויק — משנה אקלים של כיתה שלמה.</p>
+  <br><br>
+  <p style="font-size:15px;font-weight:700;color:var(--rose-dark);line-height:1.8">באהבה ובהערכה,<br>אורלי רובין</p>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 3: CHECK-IN ═══════════════ -->
+<div class="page" id="page-3">
+<div class="inner">
+  <div class="page-chip">צ'ק אין אישי</div>
+  <div class="page-h1">רגע לעצור ולהתבונן</div>
+  <p class="body muted">הזיזי את הסרגל:</p>
+
+  <div class="scale-wrap">
+    <div class="scale-label-row">
+      <span class="scale-q">כמה אנרגיה יש לי כרגע?</span>
+      <span class="scale-val" id="v1">5</span>
+    </div>
+    <input type="range" min="1" max="10" value="5" oninput="document.getElementById('v1').textContent=this.value">
+    <div class="scale-ends"><span>10</span><span>1</span></div>
+  </div>
+
+  <div class="scale-wrap">
+    <div class="scale-label-row">
+      <span class="scale-q">כמה סבלנות יש לי בתקופה הזו?</span>
+      <span class="scale-val" id="v2">5</span>
+    </div>
+    <input type="range" min="1" max="10" value="5" oninput="document.getElementById('v2').textContent=this.value">
+    <div class="scale-ends"><span>10</span><span>1</span></div>
+  </div>
+
+  <div class="scale-wrap">
+    <div class="scale-label-row">
+      <span class="scale-q">כמה אני מרגישה מסוגלת בכיתה?</span>
+      <span class="scale-val" id="v3">5</span>
+    </div>
+    <input type="range" min="1" max="10" value="5" oninput="document.getElementById('v3').textContent=this.value">
+    <div class="scale-ends"><span>10</span><span>1</span></div>
+  </div>
+
+  <label class="field-label">מה הכי שוחק אותי כרגע?</label>
+  <textarea placeholder="כתבי כאן..."></textarea>
+
+  <label class="field-label">מה עוזר לי להחזיק מעמד?</label>
+  <textarea placeholder="כתבי כאן..."></textarea>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 4: LOAD MAP ═══════════════ -->
+<div class="page" id="page-4">
+<div class="inner">
+  <div class="page-chip">מיפוי אישי</div>
+  <div class="page-h1">מפת העומס שלי</div>
+
+  <label class="field-label">מה שוחק אותי כרגע?</label>
+  <textarea style="min-height:100px" placeholder="כתבי כאן..."></textarea>
+
+  <label class="field-label">מה מחזיק אותי?</label>
+  <textarea style="min-height:100px" placeholder="כתבי כאן..."></textarea>
+
+  <label class="field-label">מה אני צריכה מהמערכת / מהצוות?</label>
+  <textarea style="min-height:100px" placeholder="כתבי כאן..."></textarea>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 5: SUPERPOWER ═══════════════ -->
+<div class="page" id="page-5">
+<div class="inner">
+  <div class="page-chip">חוזקות</div>
+  <div class="page-h1">גם בתקופה מורכבת — יש לי חוזקות</div>
+
+  <label class="field-label">כוח העל שלי כמורה הוא:</label>
+  <textarea placeholder="כתבי כאן..."></textarea>
+
+  <label class="field-label" style="margin-bottom:12px">תלמידים בדרך כלל מרגישים שאני:</label>
+  <div class="cb-list" id="cb5">
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>רואה אותם</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>רגועה</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>עקבית</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>מכילה</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>ברורה</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>מצחיקה</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>יצירתית</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>מחזקת</div>
+  </div>
+  <label class="field-label">אחרת:</label>
+  <input type="text" placeholder="_______________">
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 6: BURNOUT ═══════════════ -->
+<div class="page" id="page-6">
+<div class="inner">
+  <div class="page-chip">מודעות עצמית</div>
+  <div class="page-h1">איך שחיקה נראית בכיתה?</div>
+  <p class="body muted" style="margin-bottom:16px">סמני מה מוכר לך:</p>
+
+  <div class="cb-list">
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>אני מגיבה מהר יותר מבעבר</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>יש לי פחות סבלנות</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>אני עייפה רוב הזמן</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>קשה לי להחזיק גבולות</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>אני מרגישה מוצפת</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>אני פחות נהנית ללמד</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>אני מוותרת כדי להימנע מעימותים</div>
+    <div class="cb-item" onclick="toggleCb(this)"><div class="cb-box">✓</div>אני מסיימת ימים מותשת</div>
+  </div>
+
+  <div class="hl-dark">שחיקה אינה חולשה.<br>זו תגובה נורמלית לתקופה לא נורמלית.</div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 7: OXYGEN ═══════════════ -->
+<div class="page" id="page-7">
+<div class="inner">
+  <div class="page-chip">תכנית אישית</div>
+  <div class="page-h1">מה עוזר לי לחזור לעצמי?</div>
+  <label class="field-label" style="margin-bottom:12px">שלושה דברים שמטעינים אותי:</label>
+  <div class="num-list">
+    <div class="num-item"><div class="num-badge">1</div><input type="text" placeholder="כתבי כאן..."></div>
+    <div class="num-item"><div class="num-badge">2</div><input type="text" placeholder="כתבי כאן..."></div>
+    <div class="num-item"><div class="num-badge">3</div><input type="text" placeholder="כתבי כאן..."></div>
+  </div>
+  <div style="height:8px"></div>
+  <label class="field-label">אדם אחד שאני יכולה להיעזר בו:</label>
+  <input type="text" placeholder="_______________">
+  <label class="field-label">משהו קטן שאני יכולה לעשות השבוע בשביל עצמי:</label>
+  <textarea placeholder="כתבי כאן..."></textarea>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 8: UNDER BEHAVIOR ═══════════════ -->
+<div class="page" id="page-8">
+<div class="inner">
+  <div class="page-chip">הבנת התנהגות</div>
+  <div class="page-h1">מה יושב מתחת להתנהגות?</div>
+  <p class="body">לא כל התנהגות היא "חוצפה". לפעמים מתחת להתנגדות יש:</p>
+
+  <div class="grid5">
+    <div class="grid5-item">הצפה</div>
+    <div class="grid5-item">חרדה</div>
+    <div class="grid5-item">עייפות</div>
+    <div class="grid5-item">צורך בשליטה</div>
+    <div class="grid5-item full">חוסר מסוגלות</div>
+  </div>
+
+  <div class="hl">המטרה שלנו היא לא רק <strong>"לעצור התנהגות"</strong> — אלא להבין מה יעזור לתלמיד <strong>לחזור לתפקוד.</strong></div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGES 9–13: CASES ═══════════════ -->
+<div class="page" id="page-9">
+<div class="inner">
+  <span class="tag">מקרה 1</span>
+  <div class="page-h2">"לא בא לי"</div>
+  <div class="case-box">המורה מבקשת להתחיל עבודה.<br>התלמיד נשען אחורה ואומר: "לא בא לי."</div>
+  <label class="field-label">מה אני רואה?</label><textarea placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">מה יכול לשבת מתחת?</label><textarea placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">מה תהיה תגובה נכונה?</label><textarea placeholder="כתבי כאן..."></textarea>
+</div>
+</div>
+
+<div class="page" id="page-10">
+<div class="inner">
+  <span class="tag">מקרה 2</span>
+  <div class="page-h2">כיתה רועשת מהשנייה הראשונה</div>
+  <div class="case-box">התלמידים נכנסים נסערים, מדברים, מסתובבים ולא מתארגנים.</div>
+  <label class="field-label">מה אני רואה?</label><textarea placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">מה יכול להסביר את המצב?</label><textarea placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">איך מחזירים מבנה?</label><textarea placeholder="כתבי כאן..."></textarea>
+</div>
+</div>
+
+<div class="page" id="page-11">
+<div class="inner">
+  <span class="tag">מקרה 3</span>
+  <div class="page-h2">תלמיד מתווכח על כל בקשה</div>
+  <div class="case-box">"אבל גם הוא דיבר."<br>"למה דווקא אני?"</div>
+  <label class="field-label">מה מטרת הוויכוח?</label><textarea placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">מה לא יעזור לעשות?</label><textarea placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">מה כן יעזור?</label><textarea placeholder="כתבי כאן..."></textarea>
+</div>
+</div>
+
+<div class="page" id="page-12">
+<div class="inner">
+  <span class="tag">מקרה 4</span>
+  <div class="page-h2">תלמידה בוכה ממשימה פשוטה</div>
+  <div class="case-box">המשימה נראית פשוטה — אבל התלמידה קופאת ומתחילה לבכות.</div>
+  <label class="field-label">מה יושב מתחת להתנהגות?</label><textarea placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">איך אפשר לפרק את המשימה?</label><textarea placeholder="כתבי כאן..."></textarea>
+</div>
+</div>
+
+<div class="page" id="page-13">
+<div class="inner">
+  <span class="tag">מקרה 5</span>
+  <div class="page-h2">כיתה שקטה — אבל לא לומדת</div>
+  <div class="case-box">אין רעש, אבל גם אין מעורבות.</div>
+  <label class="field-label">מה יכול להסביר את זה?</label><textarea placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">איך מייצרים חיבור ומעורבות?</label><textarea placeholder="כתבי כאן..."></textarea>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 14: AUTHORITY LANGUAGE ═══════════════ -->
+<div class="page" id="page-14">
+<div class="inner">
+  <div class="page-chip">שפה חינוכית</div>
+  <div class="page-h1">סמכות לא חייבת להיות כוחנית</div>
+  <p class="body">שפה סמכותית היא:</p>
+  <div class="grid5" style="margin-bottom:24px">
+    <div class="grid5-item">✓ קצרה</div>
+    <div class="grid5-item">✓ ברורה</div>
+    <div class="grid5-item">✓ רגועה</div>
+    <div class="grid5-item">✓ עקבית</div>
+    <div class="grid5-item full">✓ אומרת מה כן לעשות · לא נכנסת למאבקי כוח</div>
+  </div>
+  <div class="formula">
+    <div class="formula-t">כלל &nbsp;←&nbsp; הנחיה &nbsp;←&nbsp; אמונה ביכולת</div>
+    <div class="formula-ex">"הכלל שלנו הוא לדבר ברשות.<br>עכשיו מקשיבים.<br>אני יודעת שאתם יכולים."</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGES 15–17: BEFORE/AFTER ═══════════════ -->
+<div class="page" id="page-15">
+<div class="inner">
+  <div class="page-chip">שפה סמכותית</div>
+  <div class="page-h2">מה אומרים במקום?</div>
+  <table class="ba-table">
+    <thead><tr><th class="bad">✕ במקום</th><th class="good">✓ אומרים</th></tr></thead>
+    <tbody>
+      <tr><td class="bad">אתה מפריע לכולם.</td><td class="good">הכלל שלנו הוא לדבר ברשות. אני יודעת שאתה יכול.</td></tr>
+      <tr><td class="bad">נו, למה אתה לא מתחיל?</td><td class="good">פותחים מחברת ומתחילים מהשורה הראשונה.</td></tr>
+      <tr><td class="bad">אין לי כוח לזה.</td><td class="good">מתחילים בחלק אחד. אחר כך נמשיך.</td></tr>
+      <tr><td class="bad">די להתווכח.</td><td class="good">כרגע מקשיבים להנחיה. נדבר אחר כך אם יהיה צורך.</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<div class="page" id="page-16">
+<div class="inner">
+  <div class="page-chip">שפה סמכותית</div>
+  <div class="page-h2">מה אומרים במקום? (המשך)</div>
+  <table class="ba-table">
+    <thead><tr><th class="bad">✕ במקום</th><th class="good">✓ אומרים</th></tr></thead>
+    <tbody>
+      <tr><td class="bad">שב כבר.</td><td class="good">עכשיו יושבים במקום ומצטרפים.</td></tr>
+      <tr><td class="bad">ככה לא מדברים.</td><td class="good">מדברים בכבוד. תאמר את זה שוב בצורה מתאימה.</td></tr>
+      <tr><td class="bad">די לקטר.</td><td class="good">שמעתי אותך. עכשיו ממשיכים.</td></tr>
+      <tr><td class="bad">תתרכז כבר.</td><td class="good">עיניים לכאן, ציוד מוכן, ומתחילים.</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<div class="page" id="page-17">
+<div class="inner">
+  <div class="page-chip">שפה סמכותית</div>
+  <div class="page-h2">מה אומרים במקום? (המשך)</div>
+  <table class="ba-table">
+    <thead><tr><th class="bad">✕ במקום</th><th class="good">✓ אומרים</th></tr></thead>
+    <tbody>
+      <tr><td class="bad">די לדבר.</td><td class="good">שומרים את ההערה לסיום.</td></tr>
+      <tr><td class="bad">לא מעניין אותי למה.</td><td class="good">לפעמים מתחילים גם כשלא מתחשק.</td></tr>
+      <tr><td class="bad">למה אתה כזה עקשן?</td><td class="good">כרגע המשימה היא להתחיל בשלב הראשון.</td></tr>
+      <tr><td class="bad">זה קל, תפסיק להגזים.</td><td class="good">מתחילים מהחלק שאפשר לעשות עכשיו.</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 18: PRACTICE ═══════════════ -->
+<div class="page" id="page-18">
+<div class="inner">
+  <div class="page-chip">תרגול אישי</div>
+  <div class="page-h1">איך הייתי אומרת את זה אחרת?</div>
+  <div class="action-box">
+    <span class="action-box-lbl">סיטואציה 1</span>
+    <label class="field-label">תיאור:</label><input type="text" placeholder="_______________">
+    <label class="field-label">מה הייתי אומרת בעבר?</label><input type="text" placeholder="_______________">
+    <label class="field-label">מה אומר מעכשיו?</label><input type="text" placeholder="_______________">
+  </div>
+  <div class="action-box">
+    <span class="action-box-lbl">סיטואציה 2</span>
+    <label class="field-label">תיאור:</label><input type="text" placeholder="_______________">
+    <label class="field-label">מה הייתי אומרת בעבר?</label><input type="text" placeholder="_______________">
+    <label class="field-label">מה אומר מעכשיו?</label><input type="text" placeholder="_______________">
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 19: REINFORCEMENT ═══════════════ -->
+<div class="page" id="page-19">
+<div class="inner">
+  <div class="page-chip">חיזוק חיובי</div>
+  <div class="page-h1">מה שמחזקים — גדל</div>
+  <p class="body">אם אנחנו רוצות יותר:</p>
+  <div class="pills">
+    <span class="pill">שיתוף פעולה</span>
+    <span class="pill">התמדה</span>
+    <span class="pill">מאמץ</span>
+    <span class="pill">ויסות עצמי</span>
+  </div>
+  <div class="hl"><strong>לא מחכים לשלמות.</strong><br>מחזקים: התחלה · מאמץ · השתדלות · שיפור קטן</div>
+  <div class="hl-dark">על כל תיקון —<br>לחפש לפחות <strong>3 חיזוקים</strong></div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 20: PHRASES ═══════════════ -->
+<div class="page" id="page-20">
+<div class="inner">
+  <div class="page-chip">משפטי חיזוק</div>
+  <div class="page-h2">דוגמאות לפי סוג</div>
+  <div class="rc-grid">
+    <div class="rc-card"><div class="rc-title">התחלה</div><p class="rc-text">"אהבתי שהתחלת מיד."</p><p class="rc-text">"ניגשת ישר למשימה."</p></div>
+    <div class="rc-card"><div class="rc-title">מאמץ</div><p class="rc-text">"אני רואה שאתה עובד קשה."</p><p class="rc-text">"לא ויתרת למרות שהיה קשה."</p></div>
+    <div class="rc-card"><div class="rc-title">השתדלות</div><p class="rc-text">"רואים שאתה משתדל."</p><p class="rc-text">"עשית צעד קדימה."</p></div>
+    <div class="rc-card"><div class="rc-title">שיפור</div><p class="rc-text">"היום הצלחת יותר מאתמול."</p><p class="rc-text">"ראיתי שינוי לטובה."</p></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 21: PRECISE ═══════════════ -->
+<div class="page" id="page-21">
+<div class="inner">
+  <div class="page-chip">חיזוק מדויק</div>
+  <div class="page-h2">במקום "כל הכבוד" — נגיד:</div>
+  <div class="good-item"><span class="good-check">✓</span>"כל הכבוד שהתיישבת מיד."</div>
+  <div class="good-item"><span class="good-check">✓</span>"אהבתי שחיכית לתורך."</div>
+  <div class="good-item"><span class="good-check">✓</span>"יפה שביקשת עזרה בצורה מכבדת."</div>
+  <div style="height:20px"></div>
+  <div style="background:var(--rose-light);border-radius:14px;padding:20px;text-align:center">
+    <p style="font-size:12px;font-weight:700;color:var(--rose-dark);margin-bottom:10px">כלל חשוב</p>
+    <p style="font-size:20px;font-weight:800;color:var(--dark);line-height:1.4">על כל תיקון —<br>לחפש לפחות 3 חיזוקים.</p>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 22: 3 MINUTES ═══════════════ -->
+<div class="page" id="page-22">
+<div class="inner">
+  <div class="page-chip">ניהול כיתה</div>
+  <div class="page-h1">3 הדקות הראשונות</div>
+  <p class="body">שלוש הדקות הראשונות קובעות את הטון של כל השיעור.</p>
+  <div class="icon-grid">
+    <div class="icon-card"><span class="ic">📌</span>פתיחה קבועה</div>
+    <div class="icon-card"><span class="ic">⚡</span>משימה קצרה</div>
+    <div class="icon-card"><span class="ic">🎯</span>הוראה ברורה</div>
+    <div class="icon-card"><span class="ic">✨</span>חיזוק מהיר</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 23: LESSON PLAN ═══════════════ -->
+<div class="page" id="page-23">
+<div class="inner">
+  <div class="page-chip">תכנון</div>
+  <div class="page-h1">מה יקרה ב־3 הדקות הראשונות שלי?</div>
+  <label class="field-label">משפט פתיחה:</label>
+  <textarea placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">המשימה הראשונה:</label>
+  <textarea style="min-height:100px" placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">איך אחזק תלמידים שמתחילים?</label>
+  <textarea placeholder="כתבי כאן..."></textarea>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 24: TAKEAWAYS ═══════════════ -->
+<div class="page" id="page-24">
+<div class="inner">
+  <div class="page-chip">סיכום אישי</div>
+  <div class="page-h1">אני יוצאת מכאן עם…</div>
+  <div class="action-box">
+    <span class="action-box-lbl">דבר אחד שאני מפסיקה לעשות:</span>
+    <textarea placeholder="כתבי כאן..."></textarea>
+  </div>
+  <div class="action-box">
+    <span class="action-box-lbl">דבר אחד שאני מתחילה לעשות:</span>
+    <textarea placeholder="כתבי כאן..."></textarea>
+  </div>
+  <div class="action-box">
+    <span class="action-box-lbl">משפט שאאמץ בכיתה:</span>
+    <textarea placeholder="כתבי כאן..."></textarea>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 25: ACTION PLAN ═══════════════ -->
+<div class="page" id="page-25">
+<div class="inner">
+  <div class="page-chip">תכנית פעולה</div>
+  <div class="page-h1">מה אני עושה הלאה?</div>
+  <label class="field-label">כלי אחד שאנסה השבוע:</label>
+  <textarea style="min-height:110px" placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">תלמיד / כיתה שאני רוצה לעבוד איתם אחרת:</label>
+  <textarea style="min-height:110px" placeholder="כתבי כאן..."></textarea>
+  <label class="field-label">מי יכול/ה לעזור לי להתמיד?</label>
+  <input type="text" placeholder="_______________">
+</div>
+</div>
+
+<!-- ═══════════════ PAGE 26: CLOSING ═══════════════ -->
+<div class="page" id="page-26">
+<div class="closing">
+  <div class="cl-orb"><div class="cl-dot"></div></div>
+  <div class="cl-title">קטן. עקבי. אפשרי.</div>
+  <div class="cl-sub">לא צריך לשנות הכול בבת אחת.<br>שינוי קטן, עקבי ומכוון —<br>יכול לשנות אקלים של כיתה שלמה.</div>
+  <div class="cl-div"></div>
+  <div class="cl-sig">
+    תודה על העשייה, ההשקעה והלב<br>שאתן מביאות בכל יום מחדש.<br><br>
+    <strong>אורלי רובין</strong><br>
+    <span style="color:#7a5a54">המרכז לייעוץ וטיפול התנהגותי</span>
+  </div>
+</div>
+</div>
+
+<!-- ── NAV ── -->
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>&#8250;</button>
+  <div style="flex:1;text-align:center">
+    <div class="nav-title" id="navTitle">שער</div>
+    <div class="nav-counter" id="navCounter">1 / 26</div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="go(1)">&#8249;</button>
+</div>
+
+<script>
+const titles = [
+  'שער','פתיחה','צ\'ק אין','מפת העומס','חוזקות',
+  'סימני שחיקה','תכנית חמצן','מתחת להתנהגות',
+  'מקרה 1','מקרה 2','מקרה 3','מקרה 4','מקרה 5',
+  'שפה סמכותית','לפני ואחרי (א)','לפני ואחרי (ב)','לפני ואחרי (ג)',
+  'תרגול אישי','חיזוק חיובי','משפטי חיזוק','חיזוק מדויק',
+  '3 דקות ראשונות','תכנון שיעור','סיכום אישי','תכנית פעולה','סגירה'
+];
+
+let cur = 1;
+const total = 26;
+
+function go(dir) {
+  const next = cur + dir;
+  if (next < 1 || next > total) return;
+  document.getElementById('page-' + cur).classList.remove('active');
+  cur = next;
+  document.getElementById('page-' + cur).classList.add('active');
+  document.getElementById('navTitle').textContent = titles[cur - 1];
+  document.getElementById('navCounter').textContent = cur + ' / ' + total;
+  document.getElementById('prevBtn').disabled = cur === 1;
+  document.getElementById('nextBtn').disabled = cur === total;
+  document.getElementById('prog').style.width = ((cur / total) * 100) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Swipe support
+let startX = 0;
+document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const diff = startX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) go(diff > 0 ? 1 : -1);
+}, { passive: true });
+
+function toggleCb(el) {
+  el.classList.toggle('checked');
+}
+
+// Init
+document.getElementById('prog').style.width = ((1 / total) * 100) + '%';
+</script>
+</body>
+</html>
